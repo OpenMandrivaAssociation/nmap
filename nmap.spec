@@ -7,7 +7,7 @@ Version:	4.20
 Release:	%mkrel 0.%beta.1
 %define theirversion %{version}%beta
 %else
-Release:	%mkrel 1
+Release:	%mkrel 2
 %define theirversion %{version}
 %endif
 Epoch:		1
@@ -69,18 +69,6 @@ rm -rf %{buildroot}
 
 %makeinstall nmapdatadir=%{buildroot}%{_datadir}/nmap
 
-mkdir -p %{buildroot}%{_menudir}
-cat > %{buildroot}%{_menudir}/nmap-frontend <<EOF
-?package(nmap-frontend): \
-command="%{_bindir}/nmapfe" \
-title="Nmap" \
-icon="%{name}.png" \
-longtitle="A frontend for the nmap port scanner" \
-needs="x11" \
-section="System/Monitoring" \
-xdg="true"
-EOF
-
 mkdir -p %{buildroot}{%_miconsdir,%_liconsdir}
 install -m 644 %{name}16.png %{buildroot}%{_miconsdir}/%{name}.png
 install -m 644 %{name}32.png %{buildroot}%{_iconsdir}/%{name}.png
@@ -93,12 +81,12 @@ install -d %{buildroot}%{_datadir}/applications
 cat > %{buildroot}%{_datadir}/applications/mandriva-%{name}.desktop << EOF
 [Desktop Entry]
 Name=Nmap
-Comment="A frontend for the nmap port scanner"
-Exec="%{_bindir}/nmapfe"
+Comment=A frontend for the nmap port scanner
+Exec=%{_bindir}/nmapfe
 Icon=%{name}
 Terminal=false
 Type=Application
-Categories=X-MandrivaLinux-System-Monitoring;System;Monitor;
+Categories=System;Monitor;
 EOF
 
 %post frontend
@@ -124,12 +112,8 @@ rm -rf %{buildroot}
 %{_bindir}/nmapfe
 %{_bindir}/xnmap
 %{_datadir}/applications/*.desktop
-%{_menudir}/*
 %{_iconsdir}/%{name}.png
 %{_liconsdir}/%{name}.png
 %{_miconsdir}/%{name}.png
 %{_mandir}/man1/nmapfe*
 %{_mandir}/man1/xnmap*
-
-
-
