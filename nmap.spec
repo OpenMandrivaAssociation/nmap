@@ -1,27 +1,20 @@
-%define beta	0
-
 Summary:	Network exploration tool and security scanner
 Name:		nmap
-Version:	4.20
-%if %beta
-Release:	%mkrel 0.%beta.1
-%define theirversion %{version}%beta
-%else
-Release:	%mkrel 2
-%define theirversion %{version}
-%endif
+Version:	4.50
+Release:	%mkrel 1
 Epoch:		1
 License:	GPL
 Group:		Networking/Other
 URL:		http://www.insecure.org/nmap/
-Source0:	http://download.insecure.org/nmap/dist/%{name}-%theirversion.tar.bz2
+Source0:	http://download.insecure.org/nmap/dist/%{name}-%{version}.tar.bz2
 Source1:	%{name}_icons.tar.bz2
 Patch0:		nmap-4.00-libpcap-filter.diff
 Patch1:		nmap-4.00-noreturn.diff
 Patch2:		nmap-4.00-nostrip.diff
-BuildRequires:	gtk2-devel
 BuildRequires:	libpcre-devel
 BuildRequires:	openssl-devel
+BuildRequires:	python-devel >= 2.4
+BuildRequires:	lua-devel
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
@@ -34,22 +27,25 @@ predictability characteristics, sunRPC scanning, reverse-identd scanning, and
 more.
 
 %package	frontend
-Summary:	Gtk+ frontend for nmap
+Summary:	Multi-platform graphical Nmap frontend and results viewer
 Group:		Networking/Other
 Requires:	%{name} = %{?epoch:%{epoch}:}%{version}-%{release}
+Requires:	pygtk2
+Requires:	python-sqlite2
 Requires(post): desktop-file-utils
 Requires(postun): desktop-file-utils
 
 %description	frontend
-This package includes nmapfe, a Gtk+ frontend for nmap. The nmap package must
-be installed before installing nmap-frontend.
+Zenmap is an Nmap frontend. It is meant to be useful for advanced users and to
+make Nmap easy to use by beginners. It was originally derived from Umit, an
+Nmap GUI created as part of the Google Summer of Code.
 
 %prep
 
-%setup -q -a1 -n %{name}-%theirversion
+%setup -q -n %{name}-%{version} -a1
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
+%patch2 -p0
 
 # lib64 fix
 perl -pi -e "s|/lib\b|/%{_lib}|g" configure*
@@ -67,12 +63,14 @@ perl -pi -e "s|/lib\b|/%{_lib}|g" configure*
 %install
 rm -rf %{buildroot}
 
-%makeinstall nmapdatadir=%{buildroot}%{_datadir}/nmap
+%makeinstall_std nmapdatadir=%{_datadir}/nmap
 
-mkdir -p %{buildroot}{%_miconsdir,%_liconsdir}
-install -m 644 %{name}16.png %{buildroot}%{_miconsdir}/%{name}.png
-install -m 644 %{name}32.png %{buildroot}%{_iconsdir}/%{name}.png
-install -m 644 %{name}48.png %{buildroot}%{_liconsdir}/%{name}.png
+install -m0644 docs/zenmap.1 %{buildroot}%{_mandir}/man1/
+
+install -d %{buildroot}{%_miconsdir,%_liconsdir}
+install -m0644 %{name}16.png %{buildroot}%{_miconsdir}/%{name}.png
+install -m0644 %{name}32.png %{buildroot}%{_iconsdir}/%{name}.png
+install -m0644 %{name}48.png %{buildroot}%{_liconsdir}/%{name}.png
 
 rm -f %{buildroot}%{_datadir}/applications/*.desktop
 
@@ -82,20 +80,21 @@ cat > %{buildroot}%{_datadir}/applications/mandriva-%{name}.desktop << EOF
 [Desktop Entry]
 Name=Nmap
 Comment=A frontend for the nmap port scanner
-Exec=%{_bindir}/nmapfe
+Exec=%{_bindir}/zenmap
 Icon=%{name}
 Terminal=false
 Type=Application
 Categories=System;Monitor;
 EOF
 
+# cleanup
+rm -f %{buildroot}%{_bindir}/uninstall_zenmap
+
 %post frontend
 %update_menus
-%update_desktop_database
 
 %postun frontend
 %clean_menus
-%clean_desktop_database
 
 %clean
 rm -rf %{buildroot}
@@ -103,7 +102,9 @@ rm -rf %{buildroot}
 %files 
 %defattr(-,root,root)
 %doc CHANGELOG COPYING* HACKING docs/README docs/nmap.usage.txt
-%{_bindir}/nmap
+%{_bindir}/%{name}
+%dir %{_libdir}/%{name}/nselib-bin
+%{_libdir}/%{name}/nselib-bin/*.so
 %{_datadir}/%{name}
 %{_mandir}/man1/nmap.*
 
@@ -111,9 +112,13 @@ rm -rf %{buildroot}
 %defattr(-,root,root)
 %{_bindir}/nmapfe
 %{_bindir}/xnmap
+%{_bindir}/zenmap
+%{python_sitelib}/*
+%{_datadir}/pixmaps/*
+%{_datadir}/zenmap
 %{_datadir}/applications/*.desktop
 %{_iconsdir}/%{name}.png
 %{_liconsdir}/%{name}.png
 %{_miconsdir}/%{name}.png
-%{_mandir}/man1/nmapfe*
-%{_mandir}/man1/xnmap*
+%{_datadir}/icons/*.ico
+%{_mandir}/man1/zenmap.1*
