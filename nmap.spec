@@ -15,7 +15,6 @@ BuildRequires:	libpcre-devel
 BuildRequires:	openssl-devel
 BuildRequires:	python-devel >= 2.4
 BuildRequires:	lua-devel
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 Nmap is a utility for network exploration or security auditing. It supports
