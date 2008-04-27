@@ -1,11 +1,11 @@
 Summary:	Network exploration tool and security scanner
 Name:		nmap
-Version:	4.53
+Version:	4.60
 Release:	%mkrel 1
 Epoch:		1
 License:	GPL
 Group:		Networking/Other
-URL:		http://www.insecure.org/nmap/
+URL:		http://nmap.org/
 Source0:	http://download.insecure.org/nmap/dist/%{name}-%{version}.tar.bz2
 Source1:	%{name}_icons.tar.bz2
 Patch0:		nmap-4.00-libpcap-filter.diff
