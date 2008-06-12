@@ -90,11 +90,15 @@ EOF
 # cleanup
 rm -f %{buildroot}%{_bindir}/uninstall_zenmap
 
+%if %mdkversion < 200900
 %post frontend
 %update_menus
+%endif
 
+%if %mdkversion < 200900
 %postun frontend
 %clean_menus
+%endif
 
 %clean
 rm -rf %{buildroot}
