@@ -1,6 +1,6 @@
 Summary:	Network exploration tool and security scanner
 Name:		nmap
-Version:	4.60
+Version:	4.68
 Release:	%mkrel 1
 Epoch:		1
 License:	GPL
@@ -118,11 +118,9 @@ rm -rf %{buildroot}
 %{_bindir}/xnmap
 %{_bindir}/zenmap
 %{python_sitelib}/*
-%{_datadir}/pixmaps/*
 %{_datadir}/zenmap
 %{_datadir}/applications/*.desktop
 %{_iconsdir}/%{name}.png
 %{_liconsdir}/%{name}.png
 %{_miconsdir}/%{name}.png
-%{_datadir}/icons/*.ico
 %{_mandir}/man1/zenmap.1*
