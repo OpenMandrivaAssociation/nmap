@@ -1,6 +1,6 @@
 Summary:	Network exploration tool and security scanner
 Name:		nmap
-Version:	4.75
+Version:	4.76
 Release:	%mkrel 1
 Epoch:		1
 License:	GPLv2
