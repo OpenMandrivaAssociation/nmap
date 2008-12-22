@@ -1,7 +1,7 @@
 Summary:	Network exploration tool and security scanner
 Name:		nmap
 Version:	4.76
-Release:	%mkrel 1
+Release:	%mkrel 2
 Epoch:		1
 License:	GPLv2
 Group:		Networking/Other
@@ -11,6 +11,7 @@ Source1:	%{name}_icons.tar.bz2
 Patch0:		nmap-4.00-libpcap-filter.diff
 Patch1:		nmap-4.00-noreturn.diff
 Patch2:		nmap-4.00-nostrip.diff
+Patch3:		nmap-4.76-format_not_a_string_literal_and_no_format_arguments.diff
 BuildRequires:	libpcre-devel
 BuildRequires:	openssl-devel
 BuildRequires:	python-devel >= 2.4
@@ -43,9 +44,11 @@ Nmap GUI created as part of the Google Summer of Code.
 %prep
 
 %setup -q -n %{name}-%{version} -a1
-%patch0 -p1
-%patch1 -p1
-%patch2 -p0
+%patch0 -p1 -b .libpcap-filter
+%patch1 -p0 -b .noreturn
+%patch2 -p0 -b .nostrip
+%patch3 -p1 -b .format_not_a_string_literal_and_no_format_arguments
+
 
 # lib64 fix
 perl -pi -e "s|/lib\b|/%{_lib}|g" configure*
