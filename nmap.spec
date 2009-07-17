@@ -1,7 +1,7 @@
 Summary:	Network exploration tool and security scanner
 Name:		nmap
-Version:	4.76
-Release:	%mkrel 3
+Version:	5.00
+Release:	%mkrel 1
 Epoch:		1
 License:	GPLv2
 Group:		Networking/Other
@@ -10,7 +10,6 @@ Source0:	http://download.insecure.org/nmap/dist/%{name}-%{version}.tar.bz2
 Source1:	%{name}_icons.tar.bz2
 Patch0:		nmap-4.00-libpcap-filter.diff
 Patch1:		nmap-4.00-noreturn.diff
-Patch2:		nmap-4.00-nostrip.diff
 Patch3:		nmap-4.76-format_not_a_string_literal_and_no_format_arguments.diff
 BuildRequires:	libpcre-devel
 BuildRequires:	openssl-devel
@@ -42,31 +41,24 @@ make Nmap easy to use by beginners. It was originally derived from Umit, an
 Nmap GUI created as part of the Google Summer of Code.
 
 %prep
-
 %setup -q -n %{name}-%{version} -a1
 %patch0 -p1 -b .libpcap-filter
 %patch1 -p0 -b .noreturn
-%patch2 -p0 -b .nostrip
 %patch3 -p1 -b .format_not_a_string_literal_and_no_format_arguments
-
 
 # lib64 fix
 perl -pi -e "s|/lib\b|/%{_lib}|g" configure*
 
 %build
 # update config.* to recognize amd64-*
-#%{?__cputoolize: %{__cputoolize} -c libpcap-possiblymodified}
-#%{?__cputoolize: %{__cputoolize} -c libpcre}
 %{?__cputoolize: %{__cputoolize} -c nsock/src}
 
 %configure2_5x
-
 %make 
 
 %install
 rm -rf %{buildroot}
-
-%makeinstall_std nmapdatadir=%{_datadir}/nmap
+%makeinstall_std nmapdatadir=%{_datadir}/nmap STRIP=/bin/true
 
 install -m0644 docs/zenmap.1 %{buildroot}%{_mandir}/man1/
 
@@ -110,8 +102,13 @@ rm -rf %{buildroot}
 %defattr(-,root,root)
 %doc CHANGELOG COPYING* HACKING docs/README docs/nmap.usage.txt
 %{_bindir}/%{name}
+%{_bindir}/ncat
+%{_bindir}/ndiff
 %{_datadir}/%{name}
 %{_mandir}/man1/nmap.*
+%{_mandir}/man1/ncat.*
+%{_mandir}/man1/ndiff.*
+%{_datadir}/ncat
 
 %files frontend
 %defattr(-,root,root)
