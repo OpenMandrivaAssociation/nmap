@@ -1,7 +1,7 @@
 Summary:	Network exploration tool and security scanner
 Name:		nmap
 Version:	5.00
-Release:	%mkrel 1
+Release:	%mkrel 2
 Epoch:		1
 License:	GPLv2
 Group:		Networking/Other
@@ -100,7 +100,7 @@ rm -rf %{buildroot}
 
 %files 
 %defattr(-,root,root)
-%doc CHANGELOG COPYING* HACKING docs/README docs/nmap.usage.txt
+%doc COPYING* HACKING docs/README docs/nmap.usage.txt
 %{_bindir}/%{name}
 %{_bindir}/ncat
 %{_bindir}/ndiff
