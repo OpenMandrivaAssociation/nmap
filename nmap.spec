@@ -1,16 +1,15 @@
 Summary:	Network exploration tool and security scanner
 Name:		nmap
-Version:	5.00
-Release:	%mkrel 2
+Version:	5.21
+Release:	%mkrel 1
 Epoch:		1
 License:	GPLv2
 Group:		Networking/Other
 URL:		http://nmap.org/
 Source0:	http://download.insecure.org/nmap/dist/%{name}-%{version}.tar.bz2
 Source1:	%{name}_icons.tar.bz2
-Patch0:		nmap-4.00-libpcap-filter.diff
+Patch0:		nmap-5.21-libpcap-filter.diff
 Patch1:		nmap-4.00-noreturn.diff
-Patch3:		nmap-4.76-format_not_a_string_literal_and_no_format_arguments.diff
 BuildRequires:	libpcre-devel
 BuildRequires:	openssl-devel
 BuildRequires:	python-devel >= 2.4
@@ -31,7 +30,6 @@ Summary:	Multi-platform graphical Nmap frontend and results viewer
 Group:		Networking/Other
 Requires:	%{name} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:	pygtk2
-Requires:	python-sqlite2
 Requires(post): desktop-file-utils
 Requires(postun): desktop-file-utils
 
@@ -44,7 +42,6 @@ Nmap GUI created as part of the Google Summer of Code.
 %setup -q -n %{name}-%{version} -a1
 %patch0 -p1 -b .libpcap-filter
 %patch1 -p0 -b .noreturn
-%patch3 -p1 -b .format_not_a_string_literal_and_no_format_arguments
 
 # lib64 fix
 perl -pi -e "s|/lib\b|/%{_lib}|g" configure*
@@ -82,6 +79,8 @@ Type=Application
 Categories=System;Monitor;
 EOF
 
+%find_lang %{name}
+
 # cleanup
 rm -f %{buildroot}%{_bindir}/uninstall_zenmap
 
@@ -98,7 +97,7 @@ rm -f %{buildroot}%{_bindir}/uninstall_zenmap
 %clean
 rm -rf %{buildroot}
 
-%files 
+%files -f %{name}.lang
 %defattr(-,root,root)
 %doc COPYING* HACKING docs/README docs/nmap.usage.txt
 %{_bindir}/%{name}
@@ -109,6 +108,21 @@ rm -rf %{buildroot}
 %{_mandir}/man1/ncat.*
 %{_mandir}/man1/ndiff.*
 %{_datadir}/ncat
+%lang(de) %{_mandir}/de/man1/nmap.1*
+%lang(de) %{_mandir}/es/man1/nmap.1*
+%lang(de) %{_mandir}/fr/man1/nmap.1*
+%lang(de) %{_mandir}/hr/man1/nmap.1*
+%lang(de) %{_mandir}/hu/man1/nmap.1*
+%lang(de) %{_mandir}/it/man1/nmap.1*
+%lang(de) %{_mandir}/jp/man1/nmap.1*
+%lang(de) %{_mandir}/pl/man1/nmap.1*
+%lang(de) %{_mandir}/pt_BR/man1/nmap.1*
+%lang(de) %{_mandir}/pt_PT/man1/nmap.1*
+%lang(de) %{_mandir}/ro/man1/nmap.1*
+%lang(de) %{_mandir}/ru/man1/nmap.1*
+%lang(de) %{_mandir}/sk/man1/nmap.1*
+%lang(de) %{_mandir}/zh/man1/nmap.1*
+
 
 %files frontend
 %defattr(-,root,root)
