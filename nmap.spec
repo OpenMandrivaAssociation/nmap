@@ -10,6 +10,8 @@ Source0:	http://download.insecure.org/nmap/dist/%{name}-%{version}.tar.bz2
 Source1:	%{name}_icons.tar.bz2
 Patch0:		nmap-5.21-libpcap-filter.diff
 Patch1:		nmap-4.00-noreturn.diff
+# openssl does not have md2 anymore
+Patch2:		nmap-5.21-md2.patch
 BuildRequires:	libpcre-devel
 BuildRequires:	openssl-devel
 BuildRequires:	python-devel >= 2.4
@@ -42,6 +44,7 @@ Nmap GUI created as part of the Google Summer of Code.
 %setup -q -n %{name}-%{version} -a1
 %patch0 -p1 -b .libpcap-filter
 %patch1 -p0 -b .noreturn
+%patch2 -p1 -b .md2
 
 # lib64 fix
 perl -pi -e "s|/lib\b|/%{_lib}|g" configure*
@@ -55,6 +58,7 @@ perl -pi -e "s|/lib\b|/%{_lib}|g" configure*
 
 %install
 rm -rf %{buildroot}
+unset PYTHONDONTWRITEBYTECODE
 %makeinstall_std nmapdatadir=%{_datadir}/nmap STRIP=/bin/true
 
 install -m0644 docs/zenmap.1 %{buildroot}%{_mandir}/man1/
