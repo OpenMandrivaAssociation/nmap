@@ -106,10 +106,12 @@ rm -rf %{buildroot}
 %{_bindir}/%{name}
 %{_bindir}/ncat
 %{_bindir}/ndiff
-%{_datadir}/%{name}
+%{_bindir}/nping
 %{_mandir}/man1/nmap.*
 %{_mandir}/man1/ncat.*
 %{_mandir}/man1/ndiff.*
+%{_mandir}/man1/nping.*
+%{_datadir}/%{name}
 %{_datadir}/ncat
 %lang(de) %{_mandir}/de/man1/nmap.1*
 %lang(es) %{_mandir}/es/man1/nmap.1*
