@@ -1,17 +1,16 @@
 Summary:	Network exploration tool and security scanner
 Name:		nmap
-Version:	5.21
-Release:	%mkrel 3
+Version:	5.51
+Release:	%mkrel 1
 Epoch:		1
 License:	GPLv2
 Group:		Networking/Other
 URL:		http://nmap.org/
-Source0:	http://download.insecure.org/nmap/dist/%{name}-%{version}.tar.bz2
+Source0:	http://nmap.org/nmap/dist/%{name}-%{version}.tar.bz2
 Source1:	%{name}_icons.tar.bz2
 Patch0:		nmap-5.21-libpcap-filter.diff
 Patch1:		nmap-4.00-noreturn.diff
-# openssl does not have md2 anymore
-Patch2:		nmap-5.21-md2.patch
+Patch2:		nmap-5.51-fix-format-errors.patch
 BuildRequires:	libpcre-devel
 BuildRequires:	openssl-devel
 BuildRequires:	python-devel >= 2.4
@@ -44,7 +43,7 @@ Nmap GUI created as part of the Google Summer of Code.
 %setup -q -n %{name}-%{version} -a1
 %patch0 -p1 -b .libpcap-filter
 %patch1 -p0 -b .noreturn
-%patch2 -p1 -b .md2
+%patch2 -p1 -b .format
 
 # lib64 fix
 perl -pi -e "s|/lib\b|/%{_lib}|g" configure*
@@ -113,20 +112,19 @@ rm -rf %{buildroot}
 %{_mandir}/man1/ndiff.*
 %{_datadir}/ncat
 %lang(de) %{_mandir}/de/man1/nmap.1*
-%lang(de) %{_mandir}/es/man1/nmap.1*
-%lang(de) %{_mandir}/fr/man1/nmap.1*
-%lang(de) %{_mandir}/hr/man1/nmap.1*
-%lang(de) %{_mandir}/hu/man1/nmap.1*
-%lang(de) %{_mandir}/it/man1/nmap.1*
-%lang(de) %{_mandir}/jp/man1/nmap.1*
-%lang(de) %{_mandir}/pl/man1/nmap.1*
-%lang(de) %{_mandir}/pt_BR/man1/nmap.1*
-%lang(de) %{_mandir}/pt_PT/man1/nmap.1*
-%lang(de) %{_mandir}/ro/man1/nmap.1*
-%lang(de) %{_mandir}/ru/man1/nmap.1*
-%lang(de) %{_mandir}/sk/man1/nmap.1*
-%lang(de) %{_mandir}/zh/man1/nmap.1*
-
+%lang(es) %{_mandir}/es/man1/nmap.1*
+%lang(fr) %{_mandir}/fr/man1/nmap.1*
+%lang(hr) %{_mandir}/hr/man1/nmap.1*
+%lang(hu) %{_mandir}/hu/man1/nmap.1*
+%lang(it) %{_mandir}/it/man1/nmap.1*
+%lang(jp) %{_mandir}/jp/man1/nmap.1*
+%lang(pl) %{_mandir}/pl/man1/nmap.1*
+%lang(pt_BR) %{_mandir}/pt_BR/man1/nmap.1*
+%lang(pt_PT) %{_mandir}/pt_PT/man1/nmap.1*
+%lang(ro) %{_mandir}/ro/man1/nmap.1*
+%lang(ru) %{_mandir}/ru/man1/nmap.1*
+%lang(sk) %{_mandir}/sk/man1/nmap.1*
+%lang(zh) %{_mandir}/zh/man1/nmap.1*
 
 %files frontend
 %defattr(-,root,root)
