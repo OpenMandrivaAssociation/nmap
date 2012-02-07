@@ -1,7 +1,10 @@
+%define _build_pkgcheck_set %{nil}
+%define _build_pkgcheck_srpm %{nil}
+
 Summary:	Network exploration tool and security scanner
 Name:		nmap
-Version:	5.51
-Release:	%mkrel 3
+Version:	5.51.6
+Release:	1
 Epoch:		1
 License:	GPLv2
 Group:		Networking/Other
@@ -15,7 +18,6 @@ BuildRequires:	libpcre-devel
 BuildRequires:	openssl-devel
 BuildRequires:	python-devel >= 2.4
 BuildRequires:	lua-devel
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 Nmap is a utility for network exploration or security auditing. It supports
@@ -82,26 +84,10 @@ Type=Application
 Categories=System;Monitor;
 EOF
 
-%find_lang %{name}
-
 # cleanup
 rm -f %{buildroot}%{_bindir}/uninstall_zenmap
 
-%if %mdkversion < 200900
-%post frontend
-%update_menus
-%endif
-
-%if %mdkversion < 200900
-%postun frontend
-%clean_menus
-%endif
-
-%clean
-rm -rf %{buildroot}
-
-%files -f %{name}.lang
-%defattr(-,root,root)
+%files
 %doc COPYING* HACKING docs/README docs/nmap.usage.txt
 %{_bindir}/%{name}
 %{_bindir}/ncat
@@ -129,7 +115,6 @@ rm -rf %{buildroot}
 %lang(zh) %{_mandir}/zh/man1/nmap.1*
 
 %files frontend
-%defattr(-,root,root)
 %{_bindir}/nmapfe
 %{_bindir}/xnmap
 %{_bindir}/zenmap
