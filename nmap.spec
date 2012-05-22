@@ -9,7 +9,7 @@ Epoch:		1
 License:	GPLv2
 Group:		Networking/Other
 URL:		http://nmap.org/
-Source0:	http://nmap.org/dist/%{name}-%{version}.tgz
+Source0:	http://nmap.org/dist/%{name}-%{version}.tar.bz2
 Source1:	%{name}_icons.tar.bz2
 Patch0:		nmap-5.21-libpcap-filter.diff
 Patch1:		nmap-4.00-noreturn.diff
