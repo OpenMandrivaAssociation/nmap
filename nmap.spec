@@ -3,7 +3,7 @@
 
 Summary:	Network exploration tool and security scanner
 Name:		nmap
-Version:	6.00
+Version:	6.01
 Release:	1
 Epoch:		1
 License:	GPLv2
