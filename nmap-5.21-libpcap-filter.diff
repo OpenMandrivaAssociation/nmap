@@ -1,0 +1,50 @@
+diff -ur nmap-5.21.orig/libpcap/pcap-bpf.c nmap-5.21/libpcap/pcap-bpf.c
+--- nmap-5.21.orig/libpcap/pcap-bpf.c	2009-10-27 20:33:50.000000000 +0100
++++ nmap-5.21/libpcap/pcap-bpf.c	2010-01-30 16:55:51.000000000 +0100
+@@ -449,7 +449,7 @@
+ 		fd = open(device, O_RDWR);
+ 		if (fd == -1 && errno == EACCES)
+ 			fd = open(device, O_RDONLY);
+-	} while (fd < 0 && errno == EBUSY);
++	} while (fd < 0 && errno == EBUSY && n < 1000);
+ 
+ 	/*
+ 	 * XXX better message for all minors used
+Only in nmap-5.21/libpcap: pcap-bpf.c.orig
+diff -ur nmap-5.21.orig/libpcap/pcap-linux.c nmap-5.21/libpcap/pcap-linux.c
+--- nmap-5.21.orig/libpcap/pcap-linux.c	2009-10-27 20:33:50.000000000 +0100
++++ nmap-5.21/libpcap/pcap-linux.c	2010-01-30 16:56:18.000000000 +0100
+@@ -1232,8 +1232,30 @@
+ 	if (can_filter_in_kernel) {
+ 		if ((err = set_kernel_filter(handle, &fcode)) == 0)
+ 		{
++		        char buf[1024];
++			int oldflags;
++			int ret;
++			unsigned int received = 0, rec_len = 0;
++			socklen_t optlen = sizeof(rec_len);
+ 			/* Installation succeded - using kernel filter. */
+ 			handle->md.use_bpf = 1;
++
++			oldflags = fcntl(handle->fd, F_GETFL, 0);
++			oldflags |= O_NONBLOCK;
++			fcntl(handle->fd, F_SETFL, oldflags);
++			getsockopt(handle->fd, SOL_SOCKET, SO_RCVBUF,
++				   (char *)&rec_len, &optlen);
++
++                        /* now read all packets received until now */
++			while((ret = read(handle->fd, buf, 1024)) > 0
++			      && received < rec_len) {
++			    received += ret;
++			}
++
++			if(oldflags > 0) {
++			    oldflags &= ~O_NONBLOCK;
++			    fcntl(handle->fd, F_SETFL, oldflags);
++			}
+ 		}
+ 		else if (err == -1)	/* Non-fatal error */
+ 		{
+Only in nmap-5.21/libpcap: pcap-linux.c.orig
+Only in nmap-5.21/libpcap: pcap-linux.c.rej
+Only in nmap-5.21/libpcap: pcap-linux.c~

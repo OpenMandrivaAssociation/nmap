@@ -1,0 +1,11 @@
+--- libpcap/gencode.c	2007-08-26 02:01:14.000000000 +0200
++++ libpcap/gencode.c.oden	2008-12-22 13:31:32.000000000 +0100
+@@ -113,7 +113,7 @@ static int	pcap_fddipad;
+ #endif
+ 
+ /* VARARGS */
+-void
++void __attribute__((__noreturn__))
+ bpf_error(const char *fmt, ...)
+ {
+ 	va_list ap;
