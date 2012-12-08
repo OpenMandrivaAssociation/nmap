@@ -1,0 +1,12 @@
+diff -Naur -x '*~' nmap-5.51/nse_main.cc nmap-5.51-fix-format-errors/nse_main.cc
+--- nmap-5.51/nse_main.cc	2011-01-27 22:49:15.000000000 +0100
++++ nmap-5.51-fix-format-errors/nse_main.cc	2011-02-19 18:43:42.000000000 +0100
+@@ -241,7 +241,7 @@
+   const char *text;
+ 
+   text = luaL_checkstring(L, 1);
+-  xml_write_escaped(text);
++  xml_write_escaped("%s", text);
+ 
+   return 0;
+ }

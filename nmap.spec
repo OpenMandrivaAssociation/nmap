@@ -1,22 +1,20 @@
-%define _build_pkgcheck_set %{nil}
-%define _build_pkgcheck_srpm %{nil}
+%define _disable_ld_no_undefined 1
 
 Summary:	Network exploration tool and security scanner
 Name:		nmap
-Version:	6.01
-Release:	1
+Version:	6.25
+Release:	%mkrel 1
 Epoch:		1
 License:	GPLv2
 Group:		Networking/Other
 URL:		http://nmap.org/
-Source0:	http://nmap.org/dist/%{name}-%{version}.tar.bz2
+Source0:	http://download.insecure.org/nmap/dist/%{name}-%{version}.tar.bz2
 Source1:	%{name}_icons.tar.bz2
-Patch0:		nmap-5.21-libpcap-filter.diff
-Patch1:		nmap-4.00-noreturn.diff
-BuildRequires:	libpcre-devel
-BuildRequires:	openssl-devel
-BuildRequires:	python-devel >= 2.4
-BuildRequires:	lua-devel
+BuildRequires:	libpcap-devel
+BuildRequires:	pkgconfig(libpcre)
+BuildRequires:	pkgconfig(openssl)
+BuildRequires:	pkgconfig(python) >= 2.4
+BuildRequires:	pkgconfig(lua)
 
 %description
 Nmap is a utility for network exploration or security auditing. It supports
@@ -30,7 +28,7 @@ more.
 %package	frontend
 Summary:	Multi-platform graphical Nmap frontend and results viewer
 Group:		Networking/Other
-Requires:	%{name} = %{?epoch:%{epoch}:}%{version}-%{release}
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	pygtk2
 Requires(post): desktop-file-utils
 Requires(postun): desktop-file-utils
@@ -42,17 +40,12 @@ Nmap GUI created as part of the Google Summer of Code.
 
 %prep
 %setup -q -n %{name}-%{version} -a1
-%patch0 -p1 -b .libpcap-filter
-%patch1 -p0 -b .noreturn
 
 # lib64 fix
 perl -pi -e "s|/lib\b|/%{_lib}|g" configure*
 
 %build
-# update config.* to recognize amd64-*
-#{?__cputoolize: %{__cputoolize} -c nsock/src}
-
-%configure2_5x
+%configure2_5x --without-nmap-update
 %make 
 
 %install
@@ -71,46 +64,34 @@ rm -f %{buildroot}%{_datadir}/applications/*.desktop
 
 # XDG menu
 install -d %{buildroot}%{_datadir}/applications
-cat > %{buildroot}%{_datadir}/applications/mandriva-%{name}.desktop << EOF
+cat > %{buildroot}%{_datadir}/applications/%{_vendor}-%{name}.desktop << EOF
 [Desktop Entry]
 Name=Nmap
 Comment=A frontend for the nmap port scanner
-Exec=%{_bindir}/zenmap
+Exec=zenmap
 Icon=%{name}
 Terminal=false
 Type=Application
 Categories=System;Monitor;
 EOF
 
+%find_lang %{name} --with-man
+
 # cleanup
 rm -f %{buildroot}%{_bindir}/uninstall_zenmap
 
-%files
+%files -f %{name}.lang
 %doc COPYING* HACKING docs/README docs/nmap.usage.txt
 %{_bindir}/%{name}
 %{_bindir}/ncat
 %{_bindir}/ndiff
 %{_bindir}/nping
+%{_datadir}/%{name}
 %{_mandir}/man1/nmap.*
 %{_mandir}/man1/ncat.*
 %{_mandir}/man1/ndiff.*
 %{_mandir}/man1/nping.*
-%{_datadir}/%{name}
 %{_datadir}/ncat
-%lang(de) %{_mandir}/de/man1/nmap.1*
-%lang(es) %{_mandir}/es/man1/nmap.1*
-%lang(fr) %{_mandir}/fr/man1/nmap.1*
-%lang(hr) %{_mandir}/hr/man1/nmap.1*
-%lang(hu) %{_mandir}/hu/man1/nmap.1*
-%lang(it) %{_mandir}/it/man1/nmap.1*
-%lang(jp) %{_mandir}/jp/man1/nmap.1*
-%lang(pl) %{_mandir}/pl/man1/nmap.1*
-%lang(pt_BR) %{_mandir}/pt_BR/man1/nmap.1*
-%lang(pt_PT) %{_mandir}/pt_PT/man1/nmap.1*
-%lang(ro) %{_mandir}/ro/man1/nmap.1*
-%lang(ru) %{_mandir}/ru/man1/nmap.1*
-%lang(sk) %{_mandir}/sk/man1/nmap.1*
-%lang(zh) %{_mandir}/zh/man1/nmap.1*
 
 %files frontend
 %{_bindir}/nmapfe

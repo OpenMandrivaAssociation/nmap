@@ -1,3 +1,4 @@
 sources:
-  "nmap-6.01.tar.bz2:"	e397e453893930d14e9bb33a847d15b94b7ee83a
-  "nmap_icons.tar.bz2:"	9a27d76334d24bc64a4b25a087ee878a16bb2dfa
+  "nmap-5.51.tar.bz2": 3415ad9a3915d7e162c9e91435cc35d9c73ac7f6
+  "nmap_icons.tar.bz2": 9a27d76334d24bc64a4b25a087ee878a16bb2dfa
+  nmap-6.25.tar.bz2: 769943a1a5c10f67bf9738e26da42b3312db752f
