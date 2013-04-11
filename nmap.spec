@@ -3,7 +3,7 @@
 Summary:	Network exploration tool and security scanner
 Name:		nmap
 Version:	6.25
-Release:	%mkrel 1
+Release:	2
 Epoch:		1
 License:	GPLv2
 Group:		Networking/Other
@@ -79,6 +79,9 @@ EOF
 
 # cleanup
 rm -f %{buildroot}%{_bindir}/uninstall_zenmap
+
+# Mark python scripts as executable
+find %{python_sitelib} -type f -name "*py" -chmod a+x
 
 %files -f %{name}.lang
 %doc COPYING* HACKING docs/README docs/nmap.usage.txt
