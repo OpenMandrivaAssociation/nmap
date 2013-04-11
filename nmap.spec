@@ -81,7 +81,7 @@ EOF
 rm -f %{buildroot}%{_bindir}/uninstall_zenmap
 
 # Mark python scripts as executable
-find %{buildroot}%{python_sitelib} -type f -name "*py" -exec chmod a+x {} \;
+find %{buildroot}%{python_sitelib} -type f -name "*py" -exec sed -i 's+#!/usr/bin/env python++' {} \;
 
 %files -f %{name}.lang
 %doc COPYING* HACKING docs/README docs/nmap.usage.txt
