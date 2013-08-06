@@ -2,19 +2,19 @@
 
 Summary:	Network exploration tool and security scanner
 Name:		nmap
+Epoch:		1
 Version:	6.25
 Release:	2
-Epoch:		1
 License:	GPLv2
 Group:		Networking/Other
-URL:		http://nmap.org/
+Url:		http://nmap.org/
 Source0:	http://download.insecure.org/nmap/dist/%{name}-%{version}.tar.bz2
 Source1:	%{name}_icons.tar.bz2
 BuildRequires:	libpcap-devel
 BuildRequires:	pkgconfig(libpcre)
+BuildRequires:	pkgconfig(lua)
 BuildRequires:	pkgconfig(openssl)
 BuildRequires:	pkgconfig(python) >= 2.4
-BuildRequires:	pkgconfig(lua)
 
 %description
 Nmap is a utility for network exploration or security auditing. It supports
@@ -30,8 +30,7 @@ Summary:	Multi-platform graphical Nmap frontend and results viewer
 Group:		Networking/Other
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	pygtk2
-Requires(post): desktop-file-utils
-Requires(postun): desktop-file-utils
+Requires(post,postun):	desktop-file-utils
 
 %description	frontend
 Zenmap is an Nmap frontend. It is meant to be useful for advanced users and to
@@ -39,7 +38,7 @@ make Nmap easy to use by beginners. It was originally derived from Umit, an
 Nmap GUI created as part of the Google Summer of Code.
 
 %prep
-%setup -q -n %{name}-%{version} -a1
+%setup -q -a1
 
 # lib64 fix
 perl -pi -e "s|/lib\b|/%{_lib}|g" configure*
@@ -49,7 +48,6 @@ perl -pi -e "s|/lib\b|/%{_lib}|g" configure*
 %make 
 
 %install
-rm -rf %{buildroot}
 unset PYTHONDONTWRITEBYTECODE
 %makeinstall_std nmapdatadir=%{_datadir}/nmap STRIP=/bin/true
 
@@ -107,3 +105,4 @@ find %{buildroot}%{python_sitelib} -type f -name "*py" -exec sed -i 's+#!/usr/bi
 %{_liconsdir}/%{name}.png
 %{_miconsdir}/%{name}.png
 %{_mandir}/man1/zenmap.1*
+
