@@ -10,6 +10,7 @@ Group:		Networking/Other
 Url:		http://nmap.org/
 Source0:	http://download.insecure.org/nmap/dist/%{name}-%{version}.tar.bz2
 Source1:	%{name}_icons.tar.bz2
+Source2:	nmap.rpmlintrc
 BuildRequires:	libpcap-devel
 BuildRequires:	pkgconfig(libpcre)
 BuildRequires:	pkgconfig(lua)
@@ -44,7 +45,8 @@ Nmap GUI created as part of the Google Summer of Code.
 perl -pi -e "s|/lib\b|/%{_lib}|g" configure*
 
 %build
-%configure2_5x --without-nmap-update
+export ac_cv_path_PYTHON=%{_bindir}/python2
+%configure --without-nmap-update
 %make 
 
 %install
@@ -79,7 +81,7 @@ EOF
 rm -f %{buildroot}%{_bindir}/uninstall_zenmap
 
 # Mark python scripts as executable
-find %{buildroot}%{python_sitelib} -type f -name "*py" -exec sed -i 's+#!/usr/bin/env python++' {} \;
+find %{buildroot}%{python2_sitelib} -type f -name "*py" -exec sed -i 's+#!/usr/bin/env python++' {} \;
 
 %files -f %{name}.lang
 %doc COPYING* HACKING docs/README docs/nmap.usage.txt
@@ -98,11 +100,10 @@ find %{buildroot}%{python_sitelib} -type f -name "*py" -exec sed -i 's+#!/usr/bi
 %{_bindir}/nmapfe
 %{_bindir}/xnmap
 %{_bindir}/zenmap
-%{python_sitelib}/*
+%{python2_sitelib}/*
 %{_datadir}/zenmap
 %{_datadir}/applications/*.desktop
 %{_iconsdir}/%{name}.png
 %{_liconsdir}/%{name}.png
 %{_miconsdir}/%{name}.png
 %{_mandir}/man1/zenmap.1*
-
