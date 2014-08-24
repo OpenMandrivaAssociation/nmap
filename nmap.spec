@@ -4,7 +4,7 @@ Summary:	Network exploration tool and security scanner
 Name:		nmap
 Epoch:		1
 Version:	6.47
-Release:	1
+Release:	2
 License:	GPLv2
 Group:		Networking/Other
 Url:		http://nmap.org/
@@ -67,7 +67,9 @@ install -d %{buildroot}%{_datadir}/applications
 cat > %{buildroot}%{_datadir}/applications/%{_vendor}-%{name}.desktop << EOF
 [Desktop Entry]
 Name=Nmap
+Name[ru]=Nmap
 Comment=A frontend for the nmap port scanner
+Comment[ru]=Интерфейс для сканера портов nmap
 Exec=zenmap
 Icon=%{name}
 Terminal=false
