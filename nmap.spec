@@ -1,10 +1,12 @@
 %define _disable_ld_no_undefined 1
+%define _disable_lto 1
+%define _disable_rebuild_configure 1
 
 Summary:	Network exploration tool and security scanner
 Name:		nmap
 Epoch:		1
-Version:	6.47
-Release:	6
+Version:	7.01
+Release:	1
 License:	GPLv2
 Group:		Networking/Other
 Url:		http://nmap.org/
@@ -13,9 +15,9 @@ Source1:	%{name}_icons.tar.bz2
 Source2:	nmap.rpmlintrc
 BuildRequires:	libpcap-devel
 BuildRequires:	pkgconfig(libpcre)
-BuildRequires:	pkgconfig(lua)
+BuildRequires:	lua5.2-devel
 BuildRequires:	pkgconfig(openssl)
-BuildRequires:	pkgconfig(python) >= 2.4
+BuildRequires:	pkgconfig(python2) >= 2.4
 
 %description
 Nmap is a utility for network exploration or security auditing. It supports
@@ -91,6 +93,7 @@ find %{buildroot}%{python2_sitelib} -type f -name "*py" -exec sed -i 's+#!/usr/b
 %{_bindir}/ncat
 %{_bindir}/ndiff
 %{_bindir}/nping
+%{_bindir}/uninstall_ndiff
 %{_datadir}/%{name}
 %{_mandir}/man1/nmap.*
 %{_mandir}/man1/ncat.*
