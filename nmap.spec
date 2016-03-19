@@ -5,8 +5,8 @@
 Summary:	Network exploration tool and security scanner
 Name:		nmap
 Epoch:		1
-Version:	7.01
-Release:	3
+Version:	7.10
+Release:	1
 License:	GPLv2
 Group:		Networking/Other
 Url:		http://nmap.org/
@@ -15,7 +15,6 @@ Source1:	%{name}_icons.tar.bz2
 Source2:	nmap.rpmlintrc
 BuildRequires:	libpcap-devel
 BuildRequires:	pkgconfig(libpcre)
-BuildRequires:	lua5.2-devel
 BuildRequires:	pkgconfig(openssl)
 BuildRequires:	pkgconfig(python2) >= 2.4
 
@@ -48,7 +47,7 @@ perl -pi -e "s|/lib\b|/%{_lib}|g" configure*
 
 %build
 export ac_cv_path_PYTHON=%{_bindir}/python2
-%configure --without-nmap-update
+%configure --without-nmap-update --without-liblua
 %make 
 
 %install
