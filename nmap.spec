@@ -5,7 +5,7 @@
 Summary:	Network exploration tool and security scanner
 Name:		nmap
 Epoch:		1
-Version:	7.40
+Version:	7.50
 Release:	1
 License:	GPLv2
 Group:		Networking/Other
@@ -48,7 +48,7 @@ perl -pi -e "s|/lib\b|/%{_lib}|g" configure*
 %build
 export ac_cv_path_PYTHON=%{_bindir}/python2
 %configure --without-nmap-update --without-liblua
-%make 
+%make
 
 %install
 unset PYTHONDONTWRITEBYTECODE
