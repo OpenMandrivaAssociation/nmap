@@ -5,8 +5,8 @@
 Summary:	Network exploration tool and security scanner
 Name:		nmap
 Epoch:		1
-Version:	7.50
-Release:	3
+Version:	7.70
+Release:	1
 License:	GPLv2
 Group:		Networking/Other
 Url:		http://nmap.org/
@@ -26,6 +26,15 @@ ping scanning (determine which hosts are up), many port scanning techniques
 and port specification, decoy scanning, determination of TCP sequence
 predictability characteristics, sunRPC scanning, reverse-identd scanning, and
 more.
+
+%package	ndiff
+Summary:	Tool that helps spot differences between nmap runs
+Group:		Networking/Other
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+Requires:	python2
+
+%description ndiff
+Tool that helps spot differences between nmap runs
 
 %package	frontend
 Summary:	Multi-platform graphical Nmap frontend and results viewer
@@ -90,15 +99,17 @@ find %{buildroot}%{python2_sitelib} -type f -name "*py" -exec sed -i 's+#!/usr/b
 %doc COPYING* HACKING docs/README docs/nmap.usage.txt
 %{_bindir}/%{name}
 %{_bindir}/ncat
-%{_bindir}/ndiff
 %{_bindir}/nping
 %{_bindir}/uninstall_ndiff
 %{_datadir}/%{name}
 %{_mandir}/man1/nmap.*
 %{_mandir}/man1/ncat.*
-%{_mandir}/man1/ndiff.*
 %{_mandir}/man1/nping.*
 %{_datadir}/ncat
+
+%files ndiff
+%{_bindir}/ndiff
+%{_mandir}/man1/ndiff.*
 
 %files frontend
 %{_bindir}/nmapfe
