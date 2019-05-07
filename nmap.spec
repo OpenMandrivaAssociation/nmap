@@ -17,6 +17,9 @@ BuildRequires:	libpcap-devel
 BuildRequires:	pkgconfig(libpcre)
 BuildRequires:	pkgconfig(openssl)
 BuildRequires:	pkgconfig(python2) >= 2.4
+BuildRequires:	pkgconfig(libssh2)
+BuildRequires:	pkgconfig(zlib)
+BuildRequires:	pkgconfig(libpcre)
 
 %description
 Nmap is a utility for network exploration or security auditing. It supports
@@ -56,7 +59,7 @@ perl -pi -e "s|/lib\b|/%{_lib}|g" configure*
 
 %build
 export ac_cv_path_PYTHON=%{_bindir}/python2
-%configure --without-nmap-update --without-liblua
+%configure --without-nmap-update --without-liblua --with-libz=%{_prefix} --with-libpcre=%{_prefix} --with-libssh2=%{_prefix}
 %make
 
 %install
