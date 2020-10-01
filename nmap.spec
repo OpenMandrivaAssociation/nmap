@@ -6,20 +6,22 @@ Summary:	Network exploration tool and security scanner
 Name:		nmap
 Epoch:		1
 Version:	7.80
-Release:	2
+Release:	3
 License:	GPLv2
 Group:		Networking/Other
 Url:		http://nmap.org/
 Source0:	http://download.insecure.org/nmap/dist/%{name}-%{version}.tar.bz2
 Source1:	%{name}_icons.tar.bz2
 Source2:	nmap.rpmlintrc
-BuildRequires:	libpcap-devel
+BuildRequires:	pkgconfig(libpcap)
 BuildRequires:	pkgconfig(libpcre)
 BuildRequires:	pkgconfig(openssl)
-BuildRequires:	pkgconfig(python2) >= 2.4
 BuildRequires:	pkgconfig(libssh2)
 BuildRequires:	pkgconfig(zlib)
-BuildRequires:	pkgconfig(libpcre)
+BuildRequires:	pkgconfig(lua)
+BuildRequires:	pkgconfig(libbpf)
+%rename	%{name}-ndiff
+%rename	%{name}-frontend
 
 %description
 Nmap is a utility for network exploration or security auditing. It supports
@@ -30,40 +32,30 @@ and port specification, decoy scanning, determination of TCP sequence
 predictability characteristics, sunRPC scanning, reverse-identd scanning, and
 more.
 
-%package	ndiff
-Summary:	Tool that helps spot differences between nmap runs
-Group:		Networking/Other
-Requires:	%{name} = %{epoch}:%{version}-%{release}
-Requires:	python2
-
-%description ndiff
-Tool that helps spot differences between nmap runs
-
-%package	frontend
-Summary:	Multi-platform graphical Nmap frontend and results viewer
-Group:		Networking/Other
-Requires:	%{name} = %{epoch}:%{version}-%{release}
-Requires:	pygtk2
-Requires(post,postun):	desktop-file-utils
-
-%description	frontend
-Zenmap is an Nmap frontend. It is meant to be useful for advanced users and to
-make Nmap easy to use by beginners. It was originally derived from Umit, an
-Nmap GUI created as part of the Google Summer of Code.
-
 %prep
 %setup -q -a1
+
+# (tpg) remove bundled libs
+rm -rf libpcap libpcre macosx mswin32 libssh2 libz
 
 # lib64 fix
 perl -pi -e "s|/lib\b|/%{_lib}|g" configure*
 
 %build
 export ac_cv_path_PYTHON=%{_bindir}/python2
-%configure --without-nmap-update --without-liblua --with-libz=%{_prefix} --with-libpcre=%{_prefix} --with-libssh2=%{_prefix}
+%configure \
+	--without-nmap-update \
+	--without-zenmap \
+	--without-ndiff \
+	--with-libpcap=%{_prefix} \
+	--with-liblua=%{_prefix} \
+	--with-libz=%{_prefix} \
+	--with-libpcre=%{_prefix} \
+	--with-libssh2=%{_prefix}
+
 %make_build
 
 %install
-unset PYTHONDONTWRITEBYTECODE
 %make_install nmapdatadir=%{_datadir}/nmap STRIP=/bin/true
 
 install -m0644 docs/zenmap.1 %{buildroot}%{_mandir}/man1/
@@ -74,54 +66,18 @@ install -m0644 %{name}32.png %{buildroot}%{_iconsdir}/%{name}.png
 install -m0644 %{name}48.png %{buildroot}%{_liconsdir}/%{name}.png
 
 rm -f %{buildroot}%{_datadir}/applications/*.desktop
-
-# XDG menu
-install -d %{buildroot}%{_datadir}/applications
-cat > %{buildroot}%{_datadir}/applications/%{_vendor}-%{name}.desktop << EOF
-[Desktop Entry]
-Name=Nmap
-Name[ru]=Nmap
-Comment=A frontend for the nmap port scanner
-Comment[ru]=Интерфейс для сканера портов nmap
-Exec=zenmap
-Icon=%{name}
-Terminal=false
-Type=Application
-Categories=System;Monitor;
-EOF
+rm -f %{buildroot}%{_datadir}/ncat/ca-bundle.crt
+rmdir %{buildroot}%{_datadir}/ncat
+rm -f %{buildroot}%{_bindir}/uninstall_*
 
 %find_lang %{name} --with-man
-
-# cleanup
-rm -f %{buildroot}%{_bindir}/uninstall_zenmap
-
-# Mark python scripts as executable
-find %{buildroot}%{python2_sitelib} -type f -name "*py" -exec sed -i 's+#!/usr/bin/env python++' {} \;
 
 %files -f %{name}.lang
 %doc COPYING* HACKING docs/README docs/nmap.usage.txt
 %{_bindir}/%{name}
 %{_bindir}/ncat
 %{_bindir}/nping
-%{_bindir}/uninstall_ndiff
 %{_datadir}/%{name}
 %{_mandir}/man1/nmap.*
 %{_mandir}/man1/ncat.*
 %{_mandir}/man1/nping.*
-%{_datadir}/ncat
-
-%files ndiff
-%{_bindir}/ndiff
-%{_mandir}/man1/ndiff.*
-
-%files frontend
-%{_bindir}/nmapfe
-%{_bindir}/xnmap
-%{_bindir}/zenmap
-%{python2_sitelib}/*
-%{_datadir}/zenmap
-%{_datadir}/applications/*.desktop
-%{_iconsdir}/%{name}.png
-%{_liconsdir}/%{name}.png
-%{_miconsdir}/%{name}.png
-%{_mandir}/man1/zenmap.1*
