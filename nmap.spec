@@ -18,7 +18,6 @@ BuildRequires:	pkgconfig(openssl)
 BuildRequires:	pkgconfig(libssh2)
 BuildRequires:	pkgconfig(zlib)
 BuildRequires:	pkgconfig(lua)
-BuildRequires:	pkgconfig(libbpf)
 %rename	%{name}-ndiff
 %rename	%{name}-frontend
 
@@ -74,3 +73,4 @@ rm -f %{buildroot}%{_bindir}/uninstall_*
 %{_mandir}/man1/nmap.*
 %{_mandir}/man1/ncat.*
 %{_mandir}/man1/nping.*
+%{_mandir}/man1/zenmap.*
