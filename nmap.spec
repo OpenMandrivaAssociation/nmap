@@ -6,7 +6,7 @@ Summary:	Network exploration tool and security scanner
 Name:		nmap
 Epoch:		1
 Version:	7.80
-Release:	1
+Release:	2
 License:	GPLv2
 Group:		Networking/Other
 Url:		http://nmap.org/
@@ -60,11 +60,11 @@ perl -pi -e "s|/lib\b|/%{_lib}|g" configure*
 %build
 export ac_cv_path_PYTHON=%{_bindir}/python2
 %configure --without-nmap-update --without-liblua --with-libz=%{_prefix} --with-libpcre=%{_prefix} --with-libssh2=%{_prefix}
-%make
+%make_build
 
 %install
 unset PYTHONDONTWRITEBYTECODE
-%makeinstall_std nmapdatadir=%{_datadir}/nmap STRIP=/bin/true
+%make_install nmapdatadir=%{_datadir}/nmap STRIP=/bin/true
 
 install -m0644 docs/zenmap.1 %{buildroot}%{_mandir}/man1/
 
