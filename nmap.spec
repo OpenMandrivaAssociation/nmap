@@ -11,7 +11,6 @@ License:	GPLv2
 Group:		Networking/Other
 Url:		http://nmap.org/
 Source0:	http://download.insecure.org/nmap/dist/%{name}-%{version}.tar.bz2
-Source1:	%{name}_icons.tar.bz2
 Source2:	nmap.rpmlintrc
 BuildRequires:	pkgconfig(libpcap)
 BuildRequires:	pkgconfig(libpcre)
@@ -33,7 +32,7 @@ predictability characteristics, sunRPC scanning, reverse-identd scanning, and
 more.
 
 %prep
-%setup -q -a1
+%autosetup -p1
 
 # (tpg) remove bundled libs
 rm -rf libpcap libpcre macosx mswin32 libssh2 libz
@@ -42,16 +41,15 @@ rm -rf libpcap libpcre macosx mswin32 libssh2 libz
 perl -pi -e "s|/lib\b|/%{_lib}|g" configure*
 
 %build
-export ac_cv_path_PYTHON=%{_bindir}/python2
 %configure \
 	--without-nmap-update \
 	--without-zenmap \
 	--without-ndiff \
-	--with-libpcap=%{_prefix} \
-	--with-liblua=%{_prefix} \
-	--with-libz=%{_prefix} \
-	--with-libpcre=%{_prefix} \
-	--with-libssh2=%{_prefix}
+	--with-libpcap=yes \
+	--with-liblua=yes \
+	--with-libz=yes \
+	--with-libpcre=yes \
+	--with-libssh2=yes
 
 %make_build
 
@@ -59,11 +57,6 @@ export ac_cv_path_PYTHON=%{_bindir}/python2
 %make_install nmapdatadir=%{_datadir}/nmap STRIP=/bin/true
 
 install -m0644 docs/zenmap.1 %{buildroot}%{_mandir}/man1/
-
-install -d %{buildroot}{%_miconsdir,%_liconsdir}
-install -m0644 %{name}16.png %{buildroot}%{_miconsdir}/%{name}.png
-install -m0644 %{name}32.png %{buildroot}%{_iconsdir}/%{name}.png
-install -m0644 %{name}48.png %{buildroot}%{_liconsdir}/%{name}.png
 
 rm -f %{buildroot}%{_datadir}/applications/*.desktop
 rm -f %{buildroot}%{_datadir}/ncat/ca-bundle.crt
