@@ -5,8 +5,8 @@
 Summary:	Network exploration tool and security scanner
 Name:		nmap
 Epoch:		1
-Version:	7.80
-Release:	3
+Version:	7.90
+Release:	1
 License:	GPLv2
 Group:		Networking/Other
 Url:		http://nmap.org/
@@ -65,7 +65,7 @@ rm -f %{buildroot}%{_bindir}/uninstall_*
 %find_lang %{name} --with-man
 
 %files -f %{name}.lang
-%doc COPYING* HACKING docs/README docs/nmap.usage.txt
+%doc HACKING docs/README docs/nmap.usage.txt
 %{_bindir}/%{name}
 %{_bindir}/ncat
 %{_bindir}/nping
