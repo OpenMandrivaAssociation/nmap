@@ -5,7 +5,7 @@
 Summary:	Network exploration tool and security scanner
 Name:		nmap
 Epoch:		1
-Version:	7.91
+Version:	7.92
 Release:	1
 License:	GPLv2
 Group:		Networking/Other
