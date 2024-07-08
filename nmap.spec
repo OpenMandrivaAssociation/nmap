@@ -5,14 +5,13 @@
 Summary:	Network exploration tool and security scanner
 Name:		nmap
 Epoch:		1
-Version:	7.94
-Release:	2
+Version:	7.95
+Release:	1
 License:	GPLv2
 Group:		Networking/Other
 Url:		http://nmap.org/
 Source0:	http://download.insecure.org/nmap/dist/%{name}-%{version}.tar.bz2
 Source2:	nmap.rpmlintrc
-Patch1:		nmap-7.94-pcre2.patch
 BuildRequires:	pkgconfig(libpcap)
 BuildRequires:	pkgconfig(libpcre2-8)
 BuildRequires:	pkgconfig(openssl)
