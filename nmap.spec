@@ -9,7 +9,7 @@ Version:	7.95
 Release:	1
 License:	GPLv2
 Group:		Networking/Other
-Url:		http://nmap.org/
+Url:		https://nmap.org/
 Source0:	http://download.insecure.org/nmap/dist/%{name}-%{version}.tar.bz2
 Source2:	nmap.rpmlintrc
 BuildRequires:	pkgconfig(libpcap)
