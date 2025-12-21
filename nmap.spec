@@ -12,6 +12,11 @@ Group:		Networking/Other
 Url:		https://nmap.org/
 Source0:	http://download.insecure.org/nmap/dist/%{name}-%{version}.tar.bz2
 Source2:	nmap.rpmlintrc
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires:	pkgconfig(libpcap)
 BuildRequires:	pkgconfig(libpcre2-8)
 BuildRequires:	pkgconfig(openssl)
