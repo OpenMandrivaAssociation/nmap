@@ -47,6 +47,8 @@ rm -rf libpcap libpcre macosx mswin32 libssh2 libz
 perl -pi -e "s|/lib\b|/%{_lib}|g" configure*
 
 %build
+# The configure macro passes --disable-static. Bundled libdnet is linked
+# as src/.libs/libdnet.a, which libtool creates only when static libs are on.
 %configure \
 	--without-nmap-update \
 	--without-zenmap \
@@ -55,7 +57,8 @@ perl -pi -e "s|/lib\b|/%{_lib}|g" configure*
 	--with-liblua=yes \
 	--with-libz=yes \
 	--with-libpcre=yes \
-	--with-libssh2=yes
+	--with-libssh2=yes \
+	--enable-static
 
 %make_build
 
